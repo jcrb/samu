@@ -1,0 +1,16 @@
+Analyse SAMU
+========================================================
+
+```{r}
+library("xts")
+library("zoo")
+
+load("samu_archive.Rda")
+
+s67 <- d[d$service == "SAMU 67",]
+xts_s67 <- as.xts(s67, order.by = s67$date)
+
+a <- zoo(s67$affaires, s67$date)
+plot(a, col="palegreen")
+```
+
