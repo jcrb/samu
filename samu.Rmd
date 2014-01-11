@@ -4,13 +4,34 @@ Analyse SAMU
 ```{r}
 library("xts")
 library("zoo")
+library("lubridate")
 
 load("samu_archive.Rda")
 
 s67 <- d[d$service == "SAMU 67",]
+# supprime les lignes dupliquées:
+s67 <- s67[!duplicated(s67$date),]
+
 xts_s67 <- as.xts(s67, order.by = s67$date)
 
 a <- zoo(s67$affaires, s67$date)
-plot(a, col="palegreen")
+plot(a, col="palegreen", main="Activité du SAMU 67", ylab="Nombre d'affaires")
+
+b <- zoo(s67$conseils, s67$date)
+plot(b, col="palegreen", main="Activité du SAMU 67", ylab="Nombre de conseils")
+
+
+a <- tapply(s67$affaires,year(s67$date),sum)
+# activité en nombre d'affaires
+a
+
+# box plot. On détermine la journée la plus active en triant les enregistrements par nb affaires décroissant. ord[1] correspond à la ligne où le nb d'affaires est le plus élevé. Il s'agit de 2006, ce qui correspond à la colonne n°4. On marque la date en face du repère.
+boxplot(s67$affaires ~ year(s67$date), main="Activité du SAMU 67", ylab="Nombre d'affaires")
+
+ord <- order(s67$affaires,decreasing=TRUE)
+s67[ord[1],]
+s67$date[ord[1]]
+text(4, s67$affaires[ord[1]], s67$date[ord[1]],cex=.6,pos=4)
+
 ```
 
