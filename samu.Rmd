@@ -8,9 +8,56 @@ library("lubridate")
 
 load("samu_archive.Rda")
 
+# on met à NA les enregistrements où le nombre d'affaires < 10
+d[d$affaires < 10,] <- NA
+
+# année courante et nb de jours
+an_c <- 2013
+j1 <- as.Date(paste0(an_c,"-01-01"))
+j2 <- as.Date(paste0(an_c,"-12-31"))
+n <- as.numeric(j2-j1)
+n
+
+names(d)
+str(d)
+summary(d)
+```
+Records
+=======
+
+maximaux
+---------
+```{r records}
+
+d[d$affaires==max(d$affaires, na.rm=T) & !is.na(d$date),]
+d[d$primaires==max(d$primaires, na.rm=T) & !is.na(d$date),]
+d[d$secondaires==max(d$secondaires, na.rm=T) & !is.na(d$date),]
+d[d$ASSU==max(d$ASSU, na.rm=T) & !is.na(d$date),]
+d[d$VSAV==max(d$VSAV, na.rm=T) & !is.na(d$date),]
+d[d$conseils==max(d$conseils, na.rm=T) & !is.na(d$date),]
+d[d$Medecins==max(d$Medecins, na.rm=T) & !is.na(d$date),]
+```
+minimaux
+--------
+```{r minimaux}
+d[d$affaires==min(d$affaires, na.rm=T) & !is.na(d$date),]
+d[d$primaires==min(d$primaires, na.rm=T) & !is.na(d$date),]
+d[d$secondaires==min(d$secondaires, na.rm=T) & !is.na(d$date),]
+# d[d$ASSU==min(d$ASSU, na.rm=T) & !is.na(d$date),]
+# d[d$VSAV==min(d$VSAV, na.rm=T) & !is.na(d$date),]
+# d[d$conseils==min(d$conseils, na.rm=T) & !is.na(d$date),]
+# d[d$Medecins==min(d$Medecins, na.rm=T) & !is.na(d$date),]
+```
+
+SAMU 67
+========
+
+```{r samu67}
+
 s67 <- d[d$service == "SAMU 67",]
 # supprime les lignes dupliquées:
 s67 <- s67[!duplicated(s67$date),]
+
 
 xts_s67 <- as.xts(s67, order.by = s67$date)
 
@@ -25,13 +72,91 @@ a <- tapply(s67$affaires,year(s67$date),sum)
 # activité en nombre d'affaires
 a
 
-# box plot. On détermine la journée la plus active en triant les enregistrements par nb affaires décroissant. ord[1] correspond à la ligne où le nb d'affaires est le plus élevé. Il s'agit de 2006, ce qui correspond à la colonne n°4. On marque la date en face du repère.
+# box plot. On détermine la journée la plus active en triant les enregistrements par nb affaires décroissant. ord[1] correspond à la ligne où le nb d'affaires est le plus élevé. Il s'agxit de 2006, ce qui correspond à la colonne n°4. On marque la date en face du repère.
 boxplot(s67$affaires ~ year(s67$date), main="Activité du SAMU 67", ylab="Nombre d'affaires")
 
 ord <- order(s67$affaires,decreasing=TRUE)
 s67[ord[1],]
 s67$date[ord[1]]
 text(4, s67$affaires[ord[1]], s67$date[ord[1]],cex=.6,pos=4)
+```
 
+bilan de l'année
+----------------
+En 2013, une erreur informatique a entraîné une erreur dans le report de l'activité du SAMU67 du 24 avril 2013 au 1er novembre 2013, soit un peu plus de 6 mois:
+- **ac67** correspond à l'ensemble de l'année 2013
+- **ac67c** correspond aux mois 1-4 et 11-12 de 2013
+```{r ac_67}
+ac67 <- s67[year(s67$date) == an_c,]
+# nombre de jours renseignés
+x <- as.numeric(max(ac67$date, na.rm=T) - min(ac67$date, na.rm=T))
+round(x * 100 / n, 2)
+
+sac67 <- summary(ac67)
+sac67
+
+# comparaison avec l'année précédante:
+ap67 <- s67[year(s67$date) == an_c-1,]
+sap67 <- summary(ap67)
+sap67
+
+# analyse en ne trenant compte que des mois pleins (mois 1-4 et 11-12)
+ac67c <- ac67[ac67$date < "2013-04-24" | ac67$date > "2013-11-01",]
+summary(ac67c)
+
+x <- d[d$date < "2013-04-24" | d$date >  "2013-11-01", c("date","affaires")]
+boxplot(x$affaires ~ year(x$date), main="Activité du SAMU 67", ylab="Nombre d'affaires", sub="2013 = MOIS 1-4 et 11-12", col=c("red","red","red","red","red","red","red","yellow","red"))
+```
+
+
+
+SAMU 68
+=======
+```{r samu68}
+s68 <- d[d$service == "SAMU 68",]
+# supprime les lignes dupliquées:
+s68 <- s68[!duplicated(s68$date),]
+
+# nombre de jours renseignés
+x <- max(s68$date) - min(s68$date)
+round(x * 100 / n, 2)
+
+xts_s68 <- as.xts(s68, order.by = s68$date)
+
+a <- zoo(s68$affaires, s68$date)
+plot(a, col="palegreen", main="Activité du SAMU 68", ylab="Nombre d'affaires")
+
+b <- zoo(s68$conseils, s68$date)
+plot(b, col="palegreen", main="Activité du SAMU 68", ylab="Nombre de conseils")
+
+
+a <- tapply(s68$affaires,year(s68$date),sum)
+# activité en nombre d'affaires
+a
+
+# box plot. On détermine la journée la plus active en triant les enregistrements par nb affaires décroissant. ord[1] correspond à la ligne où le nb d'affaires est le plus élevé. Il s'agit de 2006, ce qui correspond à la colonne n°4. On marque la date en face du repère.
+boxplot(s68$affaires ~ year(s68$date), main="Activité du SAMU 68", ylab="Nombre d'affaires")
+
+ord <- order(s68$affaires,decreasing=TRUE)
+s68[ord[1],]
+s68$date[ord[1]]
+text(4, s68$affaires[ord[1]], s68$date[ord[1]],cex=.6,pos=4)
+```
+Les 2 SAMU ensembles
+--------------------
+- **at** permet de décaler les boxplot pour qu'ils ne soient pas superposés
+- **bexwex** permet de diminuer la largeur d'un boxplot
+- **add** pour mettre les 2 graphiques sur le même dessin
+- **outline** = FALSE, ne dessine pas les observations extrèmes
+
+```{r deux_samu}
+x <- d[d$date < "2013-04-24" | d$date >  "2013-11-01", c("date","affaires")]
+boxplot(x$affaires ~ year(x$date), main="Activité du SAMU 67", ylab="Nombre d'affaires", sub="2013 = MOIS 1-4 et 11-12", col=c("red","red","red","red","red","red","red","yellow","red"))
+
+boxplot(x$affaires ~ year(x$date), main="Activité des SAMU d'Alsace", ylab="Nombre d'affaires", sub="MOIS 1-4 et 11-12", col=c("red","red","red","red","red","red","red","yellow","red"), at= 1:9-0.3, boxwex=0.25, outline=FALSE)
+
+boxplot(s68$affaires ~ year(s68$date), col="green", add=TRUE, at=1:9+0.1, boxwex=0.25, names=c("","","","","","","","",""), outline=FALSE)
+
+legend(1, 1400, c("SAMU 67 ", "SAMU 68"), fill = c("red", "green"))
 ```
 
