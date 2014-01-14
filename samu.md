@@ -98,6 +98,16 @@ summary(d)
 ##  NA's   :3       NA's   :3     NA's   :3
 ```
 
+```r
+
+# nombre d'année dans la base:
+ummary(year(d$date))
+```
+
+```
+## Error: impossible de trouver la fonction "ummary"
+```
+
 Records
 =======
 
@@ -310,7 +320,10 @@ SAMU 67
 s67 <- d[d$service == "SAMU 67", ]
 # supprime les lignes dupliquées:
 s67 <- s67[!duplicated(s67$date), ]
+# nombre d'affaires
+n_67_affaires <- sum(s67$affaires)
 
+s_s67 <- summary(s67)
 
 xts_s67 <- as.xts(s67, order.by = s67$date)
 
@@ -343,11 +356,45 @@ a
 
 ```r
 
+# moyenne des dossiers:
+a <- tapply(s67$affaires, year(s67$date), mean)
+
+b <- tapply(s67$affaires, year(s67$date), sd)
+c <- rbind(a, b)
+rownames(c) <- c("moy", "e-type")
+c
+```
+
+```
+##         2006  2007  2008  2009  2010  2011  2012  2013  2014
+## moy    724.9 798.0 786.2 785.9 766.0 796.1 884.3 612.1 992.2
+## e-type 195.0 237.1 236.3 240.4 220.5 207.1 206.5 320.6 273.3
+```
+
+```r
+
+plot(a, type = "l", ylab = "Nb.moyen d'affaires/j", xlab = "", main = "SAMU 67 - Evolution du nombre des affaires", 
+    axes = FALSE, col = "blue")
+axis(1, 1:9, labels = c(2006:2014))
+axis(2)
+```
+
+![plot of chunk samu67](figure/samu673.png) 
+
+```r
+
 # box plot. On détermine la journée la plus active en triant les
 # enregistrements par nb affaires décroissant. ord[1] correspond à la ligne
 # où le nb d'affaires est le plus élevé. Il s'agxit de 2006, ce qui
 # correspond à la colonne n°4. On marque la date en face du repère.
+
+# moyenne annuelle
+moy67 <- tapply(s67$affaires, year(s67$date), mean)
+
 boxplot(s67$affaires ~ year(s67$date), main = "Activité du SAMU 67", ylab = "Nombre d'affaires")
+for (i in 1:9) {
+    points(i, moy67[i], col = "red")
+}
 
 ord <- order(s67$affaires, decreasing = TRUE)
 s67[ord[1], ]
@@ -372,14 +419,21 @@ s67$date[ord[1]]
 text(4, s67$affaires[ord[1]], s67$date[ord[1]], cex = 0.6, pos = 4)
 ```
 
-![plot of chunk samu67](figure/samu673.png) 
+![plot of chunk samu67](figure/samu674.png) 
 
+#### chiffres résumés sur la période 2006 - 2013:
+- nombre d'affaires: NA
+- moyenne des affaires/j: NA
+- médiane des affaires/j: NA
+- nombre maximal d' affaires/j: NA
+- nombre minimal d' affaires/j: NA
 
-bilan de l'année
+bilan de l'année 2013
 ----------------
 En 2013, une erreur informatique a entraîné une erreur dans le report de l'activité du SAMU67 du 24 avril 2013 au 1er novembre 2013, soit un peu plus de 6 mois:
 - **ac67** correspond à l'ensemble de l'année 2013
 - **ac67c** correspond aux mois 1-4 et 11-12 de 2013
+
 
 ```r
 ac67 <- s67[year(s67$date) == an_c, ]
@@ -394,38 +448,105 @@ round(x * 100/n, 2)
 
 ```r
 
-sac67 <- summary(ac67)
-sac67
+# nb affaires:
+n_ac67_af <- sum(ac67$affaires, na.rm = T)
+sac67_af <- summary(ac67$affaires)
+sac67_af
 ```
 
 ```
-##       date               service       affaires      primaires   
-##  Min.   :2013-01-01   SAMU 67:365   Min.   : 234   Min.   :16.0  
-##  1st Qu.:2013-04-02   SAMU 68:  0   1st Qu.: 317   1st Qu.:31.0  
-##  Median :2013-07-02   NA's   :  1   Median : 492   Median :36.0  
-##  Mean   :2013-07-02                 Mean   : 612   Mean   :36.7  
-##  3rd Qu.:2013-10-01                 3rd Qu.: 841   3rd Qu.:41.0  
-##  Max.   :2013-12-31                 Max.   :1446   Max.   :60.0  
-##  NA's   :1                          NA's   :1      NA's   :1     
-##   secondaires        néonat          TIIH        ASSU            VSAV     
-##  Min.   : 0.00   Min.   :0.00   Min.   :0   Min.   : 57.0   Min.   :12.0  
-##  1st Qu.: 5.00   1st Qu.:0.00   1st Qu.:0   1st Qu.: 81.0   1st Qu.:24.0  
-##  Median : 8.00   Median :1.00   Median :0   Median : 91.0   Median :28.0  
-##  Mean   : 7.59   Mean   :1.35   Mean   :0   Mean   : 92.7   Mean   :28.7  
-##  3rd Qu.:10.00   3rd Qu.:2.00   3rd Qu.:0   3rd Qu.:103.0   3rd Qu.:33.0  
-##  Max.   :19.00   Max.   :8.00   Max.   :0   Max.   :153.0   Max.   :67.0  
-##  NA's   :1       NA's   :1      NA's   :1   NA's   :1       NA's   :1     
-##     conseils      Medecins  
-##  Min.   : 26   Min.   : 21  
-##  1st Qu.: 51   1st Qu.: 42  
-##  Median : 67   Median : 53  
-##  Mean   : 78   Mean   : 91  
-##  3rd Qu.: 94   3rd Qu.:122  
-##  Max.   :252   Max.   :356  
-##  NA's   :1     NA's   :1
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##     234     317     492     612     841    1450       1
 ```
 
 ```r
+# nb primaires
+n_ac67_pr <- sum(ac67$primaires)
+sac67_pr <- summary(ac67$primaires)
+sac67_pr
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##    16.0    31.0    36.0    36.7    41.0    60.0       1
+```
+
+```r
+# nb secondaires
+n_ac67_tr <- sum(ac67$secondaires)
+sac67_tr <- summary(ac67$secondaires)
+sac67_tr
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##    0.00    5.00    8.00    7.59   10.00   19.00       1
+```
+
+```r
+# nb de SMUR (primaires + secondaires)
+p <- ac67$primaires
+t <- ac67$secondaires
+s <- p + t
+n_smur67 <- sum(s, na.rm = T)
+n_smur67
+```
+
+```
+## [1] 16180
+```
+
+```r
+s_smur67 <- summary(s)
+# nb de mise en oeuvre d'ASSU
+n_ac67_as <- sum(ac67$ASSU)
+sac67_as <- summary(ac67$ASSU)
+sac67_as
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##    57.0    81.0    91.0    92.7   103.0   153.0       1
+```
+
+```r
+# nb de mise en oeuvre de VSAV à la demande du SAMU
+n_ac67_vs <- sum(ac67$VSAV)
+sac67_vs <- summary(ac67$VSAV)
+sac67_vs
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##    12.0    24.0    28.0    28.7    33.0    67.0       1
+```
+
+```r
+# nombre de conseils médicaux
+n_ac67_cs <- sum(ac67$conseils)
+sac67_cs <- summary(ac67$conseils)
+sac67_cs
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##      26      51      67      78      94     252       1
+```
+
+```r
+# nombre de Médecins déclenchés par le SAMU
+n_ac67_md <- sum(ac67$Medecins)
+sac67_md <- summary(ac67$Medecins)
+sac67_md
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##      21      42      53      91     122     356       1
+```
+
+```r
+
 
 # comparaison avec l'année précédante:
 ap67 <- s67[year(s67$date) == an_c - 1, ]
@@ -504,7 +625,15 @@ boxplot(x$affaires ~ year(x$date), main = "Activité du SAMU 67", ylab = "Nombre
 
 ![plot of chunk ac_67](figure/ac_67.png) 
 
+#### chiffres résumés sur l'année 2013 pour la SAMU 67:
+- nombre d'affaires: 2.2341 &times; 10<sup>5</sup>
+- moyenne des affaires/j: 612
+- médiane des affaires/j: 492
+- nombre maximal d' affaires/j: 1450
+- nombre minimal d' affaires/j: 234
 
+- nombre d'intervention SMUR: 1.618 &times; 10<sup>4</sup>
+- nombre moyen d'interventions SMUR: 44.3
 
 
 SAMU 68
@@ -557,11 +686,38 @@ a
 
 ```r
 
+# myenne annuelle
+moy68 <- tapply(s68$affaires, year(s68$date), mean)
+moy68
+```
+
+```
+##  2006  2007  2008  2009  2010  2011  2012  2013  2014 
+## 384.4 389.1 399.0 429.8 415.3 435.2 473.1 529.9 544.6
+```
+
+```r
+plot(moy68, type = "l", ylab = "Nb.moyen d'affaires/j", xlab = "", main = "SAMU 68 - Evolution du nombre des affaires", 
+    axes = FALSE, col = "blue")
+axis(1, 1:9, labels = c(2006:2014))
+axis(2)
+```
+
+![plot of chunk samu68](figure/samu683.png) 
+
+```r
+
+
 # box plot. On détermine la journée la plus active en triant les
 # enregistrements par nb affaires décroissant. ord[1] correspond à la ligne
 # où le nb d'affaires est le plus élevé. Il s'agit de 2006, ce qui
-# correspond à la colonne n°4. On marque la date en face du repère.
+# correspond à la colonne n°4. On marque la date en face du repère.  De plus
+# on ajoute la valeur moyenne sous forme de de rond rouges:
+
 boxplot(s68$affaires ~ year(s68$date), main = "Activité du SAMU 68", ylab = "Nombre d'affaires")
+for (i in 1:9) {
+    points(i, moy68[i], col = "red")
+}
 
 ord <- order(s68$affaires, decreasing = TRUE)
 s68[ord[1], ]
@@ -586,7 +742,7 @@ s68$date[ord[1]]
 text(4, s68$affaires[ord[1]], s68$date[ord[1]], cex = 0.6, pos = 4)
 ```
 
-![plot of chunk samu68](figure/samu683.png) 
+![plot of chunk samu68](figure/samu684.png) 
 
 Les 2 SAMU ensembles
 --------------------

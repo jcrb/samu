@@ -21,9 +21,6 @@ n
 names(d)
 str(d)
 summary(d)
-
-# nombre d'année dans la base:
-ummary(year(d$date))
 ```
 Records
 =======
@@ -60,10 +57,7 @@ SAMU 67
 s67 <- d[d$service == "SAMU 67",]
 # supprime les lignes dupliquées:
 s67 <- s67[!duplicated(s67$date),]
-# nombre d'affaires
-n_67_affaires <- sum(s67$affaires)
 
-s_s67 <- summary(s67)
 
 xts_s67 <- as.xts(s67, order.by = s67$date)
 
@@ -78,86 +72,28 @@ a <- tapply(s67$affaires,year(s67$date),sum)
 # activité en nombre d'affaires
 a
 
-# moyenne des dossiers:
-a <- tapply(s67$affaires,year(s67$date),mean)
-
-b <- tapply(s67$affaires,year(s67$date),sd)
-c <- rbind(a,b)
-rownames(c) <- c("moy","e-type")
-c
-
-plot(a, type="l", ylab="Nb.moyen d'affaires/j",xlab="",main="SAMU 67 - Evolution du nombre des affaires", axes = FALSE, col="blue")
-axis(1,1:9,labels = c(2006:2014))
-axis(2)
-
 # box plot. On détermine la journée la plus active en triant les enregistrements par nb affaires décroissant. ord[1] correspond à la ligne où le nb d'affaires est le plus élevé. Il s'agxit de 2006, ce qui correspond à la colonne n°4. On marque la date en face du repère.
-
-# moyenne annuelle
-moy67 <- tapply(s67$affaires,year(s67$date),mean)
-
 boxplot(s67$affaires ~ year(s67$date), main="Activité du SAMU 67", ylab="Nombre d'affaires")
-for(i in 1:9){points(i,moy67[i],col="red")}
 
 ord <- order(s67$affaires,decreasing=TRUE)
 s67[ord[1],]
 s67$date[ord[1]]
 text(4, s67$affaires[ord[1]], s67$date[ord[1]],cex=.6,pos=4)
 ```
-#### chiffres résumés sur la période 2006 - `r an_c`:
-- nombre d'affaires: `r n_67_affaires`
-- moyenne des affaires/j: `r s_s67["Mean"]`
-- médiane des affaires/j: `r s_s67["Median"]`
-- nombre maximal d' affaires/j: `r s_s67["Max."]`
-- nombre minimal d' affaires/j: `r s_s67["Min."]`
 
-bilan de l'année `r an_c`
+bilan de l'année
 ----------------
 En 2013, une erreur informatique a entraîné une erreur dans le report de l'activité du SAMU67 du 24 avril 2013 au 1er novembre 2013, soit un peu plus de 6 mois:
 - **ac67** correspond à l'ensemble de l'année 2013
 - **ac67c** correspond aux mois 1-4 et 11-12 de 2013
-
 ```{r ac_67}
 ac67 <- s67[year(s67$date) == an_c,]
 # nombre de jours renseignés
 x <- as.numeric(max(ac67$date, na.rm=T) - min(ac67$date, na.rm=T))
 round(x * 100 / n, 2)
 
-#nb affaires:
-n_ac67_af <- sum(ac67$affaires, na.rm=T)
-sac67_af <- summary(ac67$affaires)
-sac67_af
-# nb primaires
-n_ac67_pr <- sum(ac67$primaires)
-sac67_pr <- summary(ac67$primaires)
-sac67_pr
-# nb secondaires
-n_ac67_tr <- sum(ac67$secondaires)
-sac67_tr <- summary(ac67$secondaires)
-sac67_tr
-# nb de SMUR (primaires + secondaires)
-p <- ac67$primaires
-t <- ac67$secondaires
-s <- p + t
-n_smur67 <- sum(s, na.rm=T)
-n_smur67
-s_smur67 <- summary(s)
-# nb de mise en oeuvre d'ASSU
-n_ac67_as <- sum(ac67$ASSU)
-sac67_as <- summary(ac67$ASSU)
-sac67_as
-# nb de mise en oeuvre de VSAV à la demande du SAMU
-n_ac67_vs <- sum(ac67$VSAV)
-sac67_vs <- summary(ac67$VSAV)
-sac67_vs
-# nombre de conseils médicaux
-n_ac67_cs <- sum(ac67$conseils)
-sac67_cs <- summary(ac67$conseils)
-sac67_cs
-# nombre de Médecins déclenchés par le SAMU
-n_ac67_md <- sum(ac67$Medecins)
-sac67_md <- summary(ac67$Medecins)
-sac67_md
-
+sac67 <- summary(ac67)
+sac67
 
 # comparaison avec l'année précédante:
 ap67 <- s67[year(s67$date) == an_c-1,]
@@ -171,15 +107,7 @@ summary(ac67c)
 x <- d[d$date < "2013-04-24" | d$date >  "2013-11-01", c("date","affaires")]
 boxplot(x$affaires ~ year(x$date), main="Activité du SAMU 67", ylab="Nombre d'affaires", sub="2013 = MOIS 1-4 et 11-12", col=c("red","red","red","red","red","red","red","yellow","red"))
 ```
-#### chiffres résumés sur l'année `r an_c` pour la SAMU 67:
-- nombre d'affaires: `r n_ac67_af`
-- moyenne des affaires/j: `r sac67_af["Mean"]`
-- médiane des affaires/j: `r sac67_af["Median"]`
-- nombre maximal d' affaires/j: `r sac67_af["Max."]`
-- nombre minimal d' affaires/j: `r sac67_af["Min."]`
 
-- nombre d'intervention SMUR: `r n_smur67`
-- nombre moyen d'interventions SMUR: `r  s_smur67['Mean']`
 
 
 SAMU 68
@@ -206,19 +134,8 @@ a <- tapply(s68$affaires,year(s68$date),sum)
 # activité en nombre d'affaires
 a
 
-# myenne annuelle
-moy68 <- tapply(s68$affaires,year(s68$date),mean)
-moy68
-plot(moy68, type="l", ylab="Nb.moyen d'affaires/j",xlab="",main="SAMU 68 - Evolution du nombre des affaires", axes = FALSE, col="blue")
-axis(1,1:9,labels = c(2006:2014))
-axis(2)
-
-
 # box plot. On détermine la journée la plus active en triant les enregistrements par nb affaires décroissant. ord[1] correspond à la ligne où le nb d'affaires est le plus élevé. Il s'agit de 2006, ce qui correspond à la colonne n°4. On marque la date en face du repère.
-# De plus on ajoute la valeur moyenne sous forme de de rond rouges:
-
 boxplot(s68$affaires ~ year(s68$date), main="Activité du SAMU 68", ylab="Nombre d'affaires")
-for(i in 1:9){points(i,moy68[i],col="red")}
 
 ord <- order(s68$affaires,decreasing=TRUE)
 s68[ord[1],]
