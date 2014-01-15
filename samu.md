@@ -101,11 +101,13 @@ summary(d)
 ```r
 
 # nombre d'année dans la base:
-ummary(year(d$date))
+table(year(d$date))
 ```
 
 ```
-## Error: impossible de trouver la fonction "ummary"
+## 
+## 2006 2007 2008 2009 2010 2011 2012 2013 2014 
+##  712  725  729  735  726  646  559  731   10
 ```
 
 Records

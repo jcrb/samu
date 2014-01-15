@@ -13,6 +13,9 @@ d[d$affaires < 10,] <- NA
 
 # année courante et nb de jours
 an_c <- 2013
+
+d <- d[year(d$date) < an_c+1,]
+
 j1 <- as.Date(paste0(an_c,"-01-01"))
 j2 <- as.Date(paste0(an_c,"-12-31"))
 n <- as.numeric(j2-j1)
@@ -23,7 +26,28 @@ str(d)
 summary(d)
 
 # nombre d'année dans la base:
-ummary(year(d$date))
+table(year(d$date))
+
+# nombre d'affaires par an:
+taf <- tapply(d$affaires, year(d$date), sum)
+# primaires
+tpr <- tapply(d$primaires, year(d$date), sum)
+# secondaires
+tse <- tapply(d$secondaires, year(d$date), sum)
+# SMUR
+tsm <- tpr+tse
+# ASSU
+tas <- tapply(d$ASSU, year(d$date), sum)
+# VSAV
+tvs <- tapply(d$VSAV, year(d$date), sum)
+# Conseils
+tco <- tapply(d$conseils, year(d$date), sum)
+# visites
+tme <- tapply(d$Medecins, year(d$date), sum)
+
+t <- rbind(taf,tco,tsm,tas,tvs,tme)
+rownames(t) <- c("Affaires","Conseils","SMUR","ASSU","VSAV","Médecins")
+t
 ```
 Records
 =======
@@ -241,5 +265,16 @@ boxplot(x$affaires ~ year(x$date), main="Activité des SAMU d'Alsace", ylab="Nom
 boxplot(s68$affaires ~ year(s68$date), col="green", add=TRUE, at=1:9+0.1, boxwex=0.25, names=c("","","","","","","","",""), outline=FALSE)
 
 legend(1, 1400, c("SAMU 67 ", "SAMU 68"), fill = c("red", "green"))
+```
+
+```{r smur}
+# Boxplot de l'activité SMUR
+#---------------------------
+moy_als <- tapply(d$SMUR, year(d$date), mean) # activité moyenne par
+boxplot(d$SMUR ~ year(d$date), main = "Activité des SMUR Alsaciens", ylab = "Nombre d'SMUR")
+for (i in 1:periode) { points(i, moy_als[i], col = "red")} # met act.moy sous forme de rond rouges
+# on ajoute la date où le nb d'SMUR est le plus grand. Pour cela on trie les jours par ordre décroissant et les jours les plus actifs se trouvent en tête
+ord <- order(d$SMUR, decreasing = TRUE)
+text(4, d$SMUR[ord[1]], d$date[ord[1]], cex = 0.6, pos = 4)
 ```
 
