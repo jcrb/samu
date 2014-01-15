@@ -8,6 +8,10 @@ library("lubridate")
 
 load("samu_archive.Rda")
 
+pop67 <- 1095905
+pop68 <- 749782
+pop.als.2010.municipale<-1095905 + 749782
+
 # on met à NA les enregistrements où le nombre d'affaires < 10
 d[d$affaires < 10,] <- NA
 
