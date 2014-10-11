@@ -13,10 +13,10 @@ pop68 <- 749782
 pop.als.2010.municipale<-1095905 + 749782
 
 # on met à NA les enregistrements où le nombre d'affaires < 10
-d[d$affaires < 10,] <- NA
+
 
 # année courante et nb de jours
-an_c <- 2013
+an_c <- 2014
 
 d <- d[year(d$date) < an_c+1,]
 
@@ -274,6 +274,7 @@ legend(1, 1400, c("SAMU 67 ", "SAMU 68"), fill = c("red", "green"))
 ```{r smur}
 # Boxplot de l'activité SMUR
 #---------------------------
+d$SMUR <- d$primaires + d$secondaires
 moy_als <- tapply(d$SMUR, year(d$date), mean) # activité moyenne par
 boxplot(d$SMUR ~ year(d$date), main = "Activité des SMUR Alsaciens", ylab = "Nombre d'SMUR")
 for (i in 1:periode) { points(i, moy_als[i], col = "red")} # met act.moy sous forme de rond rouges

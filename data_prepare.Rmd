@@ -13,6 +13,7 @@ for(i in 1:length(file.names)){
  }
 
 write.table(out.file, file = "samu_archive.csv", sep=",", row.names = FALSE, qmethod = "double",fileEncoding="utf-8")
+
 d <- out.file
 # supprime la ligne 1 qui est vide
 d <- d[-1,]
