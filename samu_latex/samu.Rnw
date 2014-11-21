@@ -24,7 +24,7 @@ pop.als.2010.municipale<-1095905 + 749782
 d[d$affaires < 10,] <- NA
 
 # année courante et nb de jours
-an_c <- 2013
+an_c <- 2014
 # par convention on débute au 1er janvier 2006
 d <- d[year(d$date) < an_c+1,]
 date_origine <- min(year(d$date),na.rm=T)

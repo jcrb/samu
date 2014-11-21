@@ -1,12 +1,12 @@
 Préparation des donnnées
 ========================================================
 
-Les données des SAMU sont tockées dans un fichier *.csv* de 2006 à 2013 inclus (1 fichier par année). La première ligne est le header. L'ensembles des données sont extraites pour former un fichier *.Rda*.
+Les données des SAMU sont tockées dans un fichier *.csv* de 2006 à 2014 inclus (1 fichier par année). La première ligne est le header. L'ensembles des données sont extraites pour former un fichier *.Rda*.
 
 ```{r prepare}
 path = "./samu_csv/"
-out.file<-""
-file.names <- dir(path, pattern =".csv")
+out.file <- ""
+file.names <- dir(path, pattern =".csv") # seuls les fichiers se terminant par csv sont lus
 for(i in 1:length(file.names)){
    file <- read.table(paste(path, file.names[i], sep=""),header=TRUE, sep=",", stringsAsFactors=FALSE)
    out.file <- rbind(out.file, file)

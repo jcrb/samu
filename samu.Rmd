@@ -8,6 +8,11 @@ library("lubridate")
 
 load("samu_archive.Rda")
 
+names(d)
+min(d$date)
+max(d$date)
+
+
 pop67 <- 1095905
 pop68 <- 749782
 pop.als.2010.municipale<-1095905 + 749782
@@ -132,15 +137,17 @@ s67$date[ord[1]]
 text(4, s67$affaires[ord[1]], s67$date[ord[1]],cex=.6,pos=4)
 ```
 #### chiffres résumés sur la période 2006 - `r an_c`:
+
 - nombre d'affaires: `r n_67_affaires`
-- moyenne des affaires/j: `r s_s67["Mean"]`
-- médiane des affaires/j: `r s_s67["Median"]`
-- nombre maximal d' affaires/j: `r s_s67["Max."]`
-- nombre minimal d' affaires/j: `r s_s67["Min."]`
+- moyenne des affaires/j: `r s_s67[4,3]`
+- médiane des affaires/j: `r s_s67[3,3]`
+- nombre maximal d' affaires/j: `r s_s67[6,3]`
+- nombre minimal d' affaires/j: `r s_s67[1,3]`
 
 bilan de l'année `r an_c`
 ----------------
 En 2013, une erreur informatique a entraîné une erreur dans le report de l'activité du SAMU67 du 24 avril 2013 au 1er novembre 2013, soit un peu plus de 6 mois:
+
 - **ac67** correspond à l'ensemble de l'année 2013
 - **ac67c** correspond aux mois 1-4 et 11-12 de 2013
 
