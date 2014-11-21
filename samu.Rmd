@@ -2,9 +2,16 @@ Analyse SAMU
 ========================================================
 
 ```{r}
+library(knitr)
 library("xts")
 library("zoo")
 library("lubridate")
+
+# supprimer la notation scientifique et ajouter un séparateur de milliers
+options(scipen = 6, digits = 2)
+knit_hooks$set(inline = function(x) {
+  prettyNum(x, big.mark=" ")
+})
 
 load("samu_archive.Rda")
 
@@ -39,6 +46,13 @@ table(year(d$date))
 
 # nombre d'affaires par an:
 taf <- tapply(d$affaires, year(d$date), sum)
+
+# nombre moyen d'affaires
+maf <- tapply(d$affaires, year(d$date), mean)
+
+# écart-type nombre d'affaires
+saf <- tapply(d$affaires, year(d$date), sd)
+
 # primaires
 tpr <- tapply(d$primaires, year(d$date), sum)
 # secondaires
@@ -58,6 +72,8 @@ t <- rbind(taf,tco,tsm,tas,tvs,tme)
 rownames(t) <- c("Affaires","Conseils","SMUR","ASSU","VSAV","Médecins")
 t
 ```
+
+
 Records
 =======
 
@@ -260,6 +276,7 @@ s68[ord[1],]
 s68$date[ord[1]]
 text(4, s68$affaires[ord[1]], s68$date[ord[1]],cex=.6,pos=4)
 ```
+
 Les 2 SAMU ensembles
 --------------------
 - **at** permet de décaler les boxplot pour qu'ils ne soient pas superposés
