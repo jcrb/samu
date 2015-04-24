@@ -28,7 +28,7 @@ pop.als.2010.municipale<-1095905 + 749782
 
 
 # année courante et nb de jours
-an_c <- 2014
+an_c <- 2015
 
 d <- d[year(d$date) < an_c+1,]
 
