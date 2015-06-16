@@ -34,7 +34,7 @@ d <- d[year(d$date) < an_c+1,]
 
 j1 <- as.Date(paste0(an_c,"-01-01"))
 j2 <- as.Date(paste0(an_c,"-12-31"))
-n <- as.numeric(j2-j1)
+n <- as.numeric(j2-j1) + 1
 n
 
 names(d)
@@ -72,6 +72,23 @@ t <- rbind(taf,tco,tsm,tas,tvs,tme)
 rownames(t) <- c("Affaires","Conseils","SMUR","ASSU","VSAV","Médecins")
 t
 ```
+
+Bilan régional
+==============
+```{r bilan_regional, echo=FALSE}
+anc <- 2014
+print(paste("Année", anc))
+
+d14 <- d[d$date > "2013-12-31" & d$date < "2015-01-01",]
+
+# total
+apply(d14[,3:11], 2, sum)
+
+# par jour
+print("Par jour:")
+apply(d14[,3:11], 2, sum)/365
+```
+
 
 
 Records
@@ -288,9 +305,10 @@ Les 2 SAMU ensembles
 x <- d[d$date < "2013-04-24" | d$date >  "2013-11-01", c("date","affaires")]
 boxplot(x$affaires ~ year(x$date), main="Activité du SAMU 67", ylab="Nombre d'affaires", sub="2013 = MOIS 1-4 et 11-12", col=c("red","red","red","red","red","red","red","yellow","red"))
 
-boxplot(x$affaires ~ year(x$date), main="Activité des SAMU d'Alsace", ylab="Nombre d'affaires", sub="MOIS 1-4 et 11-12", col=c("red","red","red","red","red","red","red","yellow","red"), at= 1:9-0.3, boxwex=0.25, outline=FALSE)
+boxplot(x$affaires ~ year(x$date), main="Activité des SAMU d'Alsace", ylab="Nombre d'affaires", sub="MOIS 1-4 et 11-12", col=c("red","red","red","red","red","red","red","yellow","red"), at= 1:10-0.3, boxwex=0.25, outline=FALSE)
 
-boxplot(s68$affaires ~ year(s68$date), col="green", add=TRUE, at=1:9+0.1, boxwex=0.25, names=c("","","","","","","","",""), outline=FALSE)
+# décommenter la ligne suivante:
+# boxplot(s68$affaires ~ year(s68$date), col="green", add=TRUE, at=1:8+0.1, boxwex=0.25, names=c("","","","","","","",""), outline=FALSE)
 
 legend(1, 1400, c("SAMU 67 ", "SAMU 68"), fill = c("red", "green"))
 ```
