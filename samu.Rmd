@@ -280,7 +280,7 @@ text(4, s68$affaires[ord[1]], s68$date[ord[1]],cex=.6,pos=4)
 Les 2 SAMU ensembles
 --------------------
 - **at** permet de décaler les boxplot pour qu'ils ne soient pas superposés
-- **bexwex** permet de diminuer la largeur d'un boxplot
+- **boxwex** permet de diminuer la largeur d'un boxplot
 - **add** pour mettre les 2 graphiques sur le même dessin
 - **outline** = FALSE, ne dessine pas les observations extrèmes
 
