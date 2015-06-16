@@ -318,9 +318,10 @@ legend(1, 1400, c("SAMU 67 ", "SAMU 68"), fill = c("red", "green"))
 #---------------------------
 d$SMUR <- d$primaires + d$secondaires
 moy_als <- tapply(d$SMUR, year(d$date), mean) # activité moyenne par
+periode <- 10
 boxplot(d$SMUR ~ year(d$date), main = "Activité des SMUR Alsaciens", ylab = "Nombre d'SMUR")
 for (i in 1:periode) { points(i, moy_als[i], col = "red")} # met act.moy sous forme de rond rouges
-# on ajoute la date où le nb d'SMUR est le plus grand. Pour cela on trie les jours par ordre décroissant et les jours les plus actifs se trouvent en tête
+# on ajoute la date où le nb d'envoi de SMUR est le plus grand. Pour cela on trie les jours par ordre décroissant et les jours les plus actifs se trouvent en tête
 ord <- order(d$SMUR, decreasing = TRUE)
 text(4, d$SMUR[ord[1]], d$date[ord[1]], cex = 0.6, pos = 4)
 ```
