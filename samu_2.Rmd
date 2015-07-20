@@ -160,3 +160,7 @@ boxplot(s68$affaires ~ year(s68$date), col="green", add=TRUE, at=1:9+0.1, boxwex
 legend(1, 1400, c("SAMU 67 ", "SAMU 68"), fill = c("red", "green"))
 ```
 
+Informations de session
+-----------------------
+```{r session, echo=FALSE}
+sessionInfo()
