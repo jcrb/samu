@@ -347,3 +347,10 @@ ord <- order(d$SMUR, decreasing = TRUE)
 text(4, d$SMUR[ord[1]], d$date[ord[1]], cex = 0.6, pos = 4)
 ```
 
+Informations de session
+-----------------------
+```{r session, echo=FALSE}
+sessionInfo()
+
+```
+
