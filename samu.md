@@ -13,9 +13,14 @@ library("xts")
 
 ```
 ## Loading required package: zoo
+```
+
+```
 ## 
 ## Attaching package: 'zoo'
-## 
+```
+
+```
 ## The following objects are masked from 'package:base':
 ## 
 ##     as.Date, as.Date.numeric
@@ -55,7 +60,7 @@ max(d$date)
 ```
 
 ```
-## [1] "2015-12-01"
+## [1] "2015-12-31"
 ```
 
 ```r
@@ -96,7 +101,7 @@ str(d)
 ```
 
 ```
-## 'data.frame':	6960 obs. of  11 variables:
+## 'data.frame':	7679 obs. of  11 variables:
 ##  $ date       : Date, format: "2006-12-31" "2006-12-30" ...
 ##  $ service    : Factor w/ 2 levels "SAMU 67","SAMU 68": 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ affaires   : num  1450 1202 753 744 851 ...
@@ -116,25 +121,25 @@ summary(d)
 
 ```
 ##       date               service        affaires      primaires 
-##  Min.   :2006-01-01   SAMU 67:3619   Min.   :   0   Min.   : 0  
-##  1st Qu.:2008-05-30   SAMU 68:3341   1st Qu.: 411   1st Qu.:19  
-##  Median :2010-10-17                  Median : 585   Median :28  
-##  Mean   :2010-12-04                  Mean   : 615   Mean   :28  
-##  3rd Qu.:2013-07-12                  3rd Qu.: 743   3rd Qu.:37  
-##  Max.   :2015-12-01                  Max.   :2194   Max.   :89  
+##  Min.   :2006-01-01   SAMU 67:3984   Min.   :   0   Min.   : 0  
+##  1st Qu.:2008-08-28   SAMU 68:3695   1st Qu.: 420   1st Qu.:19  
+##  Median :2011-04-15                  Median : 588   Median :28  
+##  Mean   :2011-05-09                  Mean   : 618   Mean   :28  
+##  3rd Qu.:2014-04-04                  3rd Qu.: 745   3rd Qu.:37  
+##  Max.   :2015-12-31                  Max.   :2194   Max.   :89  
 ##   secondaires     néonat         TIIH        ASSU          VSAV    
 ##  Min.   : 0   Min.   :0.0   Min.   :0   Min.   :  0   Min.   :  0  
 ##  1st Qu.: 4   1st Qu.:0.0   1st Qu.:0   1st Qu.: 26   1st Qu.: 21  
-##  Median : 6   Median :0.0   Median :0   Median : 83   Median : 37  
-##  Mean   : 7   Mean   :0.7   Mean   :0   Mean   : 70   Mean   : 45  
-##  3rd Qu.: 9   3rd Qu.:1.0   3rd Qu.:0   3rd Qu.:103   3rd Qu.: 70  
+##  Median : 6   Median :0.0   Median :0   Median : 83   Median : 38  
+##  Mean   : 7   Mean   :0.7   Mean   :0   Mean   : 70   Mean   : 46  
+##  3rd Qu.: 9   3rd Qu.:1.0   3rd Qu.:0   3rd Qu.:103   3rd Qu.: 71  
 ##  Max.   :34   Max.   :8.0   Max.   :7   Max.   :160   Max.   :147  
 ##     conseils      Medecins  
 ##  Min.   :  0   Min.   :  0  
-##  1st Qu.: 63   1st Qu.: 40  
-##  Median :106   Median : 54  
-##  Mean   :119   Mean   : 86  
-##  3rd Qu.:147   3rd Qu.:112  
+##  1st Qu.: 65   1st Qu.: 40  
+##  Median :107   Median : 54  
+##  Mean   :121   Mean   : 85  
+##  3rd Qu.:149   3rd Qu.:109  
 ##  Max.   :599   Max.   :593
 ```
 
@@ -146,7 +151,7 @@ table(year(d$date))
 ```
 ## 
 ## 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 
-##  714  726  729  735  726  646  559  731  735  659
+##  714  726  729  735  726  646  559  731  735 1378
 ```
 
 ```r
@@ -188,12 +193,12 @@ t
 ## VSAV      22779  23379  29168  33984  33238  29169  25213  40281  41475
 ## Médecins  55588  67981  69448  74293  65509  59062  48704  53820  54723
 ##            2015
-## Affaires 422968
-## Conseils  86798
-## SMUR      22090
-## ASSU      44061
-## VSAV      36253
-## Médecins  47535
+## Affaires 886339
+## Conseils 182886
+## SMUR      46157
+## ASSU      92426
+## VSAV      75431
+## Médecins 100319
 ```
 
 Bilan régional
@@ -280,8 +285,10 @@ d[d$VSAV==max(d$VSAV, na.rm=T) & !is.na(d$date),]
 ```
 ##            date service affaires primaires secondaires néonat TIIH ASSU
 ## 6961 2015-07-05 SAMU 68      853        23          12      0    0   35
+## 7620 2015-07-05 SAMU 68      853        23          12      0    0   35
 ##      VSAV conseils Medecins
 ## 6961  147      315      179
+## 7620  147      315      179
 ```
 
 ```r
@@ -387,6 +394,8 @@ d[d$secondaires==min(d$secondaires, na.rm=T) & !is.na(d$date),]
 ## 5764 2014-03-29 SAMU 67      981        34           0      1    0  121
 ## 6308 2015-04-18 SAMU 67      855        36           0      0    0   85
 ## 6940 2015-07-26 SAMU 68      532        12           0      0    0   12
+## 6967 2015-04-18 SAMU 67      855        36           0      0    0   85
+## 7599 2015-07-26 SAMU 68      532        12           0      0    0   12
 ##      VSAV conseils Medecins
 ## 77     11       47       51
 ## 377    52      102       39
@@ -431,6 +440,8 @@ d[d$secondaires==min(d$secondaires, na.rm=T) & !is.na(d$date),]
 ## 5764   31      120      132
 ## 6308   28       92      103
 ## 6940   69      255      104
+## 6967   28       92      103
+## 7599   69      255      104
 ```
 
 ```r
@@ -459,14 +470,14 @@ a <- zoo(s67$affaires, s67$date)
 plot(a, col="palegreen", main="Activité du SAMU 67", ylab="Nombre d'affaires")
 ```
 
-![](samu_files/figure-html/samu67-1.png) 
+![](samu_files/figure-html/samu67-1.png)\
 
 ```r
 b <- zoo(s67$conseils, s67$date)
 plot(b, col="palegreen", main="Activité du SAMU 67", ylab="Nombre de conseils")
 ```
 
-![](samu_files/figure-html/samu67-2.png) 
+![](samu_files/figure-html/samu67-2.png)\
 
 ```r
 a <- tapply(s67$affaires,year(s67$date),sum)
@@ -476,7 +487,7 @@ a
 
 ```
 ##   2006   2007   2008   2009   2010   2011   2012   2013   2014   2015 
-## 258065 291264 287750 286857 279600 290592 323647 223414 299899 265509
+## 258065 291264 287750 286857 279600 290592 323647 223414 299899 290671
 ```
 
 ```r
@@ -491,8 +502,8 @@ c
 
 ```
 ##        2006 2007 2008 2009 2010 2011 2012 2013 2014 2015
-## moy     725  798  786  786  766  796  884  612  822  793
-## e-type  195  237  236  240  220  207  207  321  180  180
+## moy     725  798  786  786  766  796  884  612  822  796
+## e-type  195  237  236  240  220  207  207  321  180  191
 ```
 
 ```r
@@ -501,7 +512,7 @@ axis(1,1:9,labels = c(2006:2014))
 axis(2)
 ```
 
-![](samu_files/figure-html/samu67-3.png) 
+![](samu_files/figure-html/samu67-3.png)\
 
 ```r
 # box plot. On détermine la journée la plus active en triant les enregistrements par nb affaires décroissant. ord[1] correspond à la ligne où le nb d'affaires est le plus élevé. Il s'agxit de 2006, ce qui correspond à la colonne n°4. On marque la date en face du repère.
@@ -535,12 +546,12 @@ s67$date[ord[1]]
 text(4, s67$affaires[ord[1]], s67$date[ord[1]],cex=.6,pos=4)
 ```
 
-![](samu_files/figure-html/samu67-4.png) 
+![](samu_files/figure-html/samu67-4.png)\
 #### chiffres résumés sur la période 2006 - 2 015:
 
-- nombre d'affaires: 2 806 597
+- nombre d'affaires: 2 831 759
 - moyenne des affaires/j: Mean   : 777  
-- médiane des affaires/j: Median : 724  
+- médiane des affaires/j: Median : 725  
 - nombre maximal d' affaires/j: Max.   :2194  
 - nombre minimal d' affaires/j: Min.   :  78  
 
@@ -560,7 +571,7 @@ round(x * 100 / n, 2)
 ```
 
 ```
-## [1] 92
+## [1] 100
 ```
 
 ```r
@@ -572,7 +583,7 @@ sac67_af
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##     459     663     750     793     898    1640
+##     459     661     752     796     900    1780
 ```
 
 ```r
@@ -596,7 +607,7 @@ sac67_tr
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##     0.0     5.0     7.0     7.1     9.0    17.0
+##     0.0     5.0     7.0     7.1     9.0    18.0
 ```
 
 ```r
@@ -609,7 +620,7 @@ n_smur67
 ```
 
 ```
-## [1] 14503
+## [1] 15809
 ```
 
 ```r
@@ -622,7 +633,7 @@ sac67_as
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##      81     101     107     109     116     154
+##      81     102     108     110     117     154
 ```
 
 ```r
@@ -634,7 +645,7 @@ sac67_vs
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##      12      25      29      29      34      65
+##       9      24      29      29      34      65
 ```
 
 ```r
@@ -646,7 +657,7 @@ sac67_cs
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##      48      69      84      92     108     303
+##      48      70      84      93     108     303
 ```
 
 ```r
@@ -658,7 +669,7 @@ sac67_md
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##      24      45      55      90     122     312
+##      24      45      55      91     123     474
 ```
 
 ```r
@@ -700,26 +711,26 @@ summary(ac67c)
 
 ```
 ##       date               service       affaires      primaires 
-##  Min.   :2015-01-01   SAMU 67:335   Min.   : 459   Min.   :11  
-##  1st Qu.:2015-03-25   SAMU 68:  0   1st Qu.: 663   1st Qu.:31  
-##  Median :2015-06-17                 Median : 750   Median :36  
-##  Mean   :2015-06-17                 Mean   : 793   Mean   :36  
-##  3rd Qu.:2015-09-08                 3rd Qu.: 898   3rd Qu.:41  
-##  Max.   :2015-12-01                 Max.   :1644   Max.   :71  
+##  Min.   :2015-01-01   SAMU 67:365   Min.   : 459   Min.   :11  
+##  1st Qu.:2015-04-02   SAMU 68:  0   1st Qu.: 661   1st Qu.:31  
+##  Median :2015-07-02                 Median : 752   Median :36  
+##  Mean   :2015-07-02                 Mean   : 796   Mean   :36  
+##  3rd Qu.:2015-10-01                 3rd Qu.: 900   3rd Qu.:41  
+##  Max.   :2015-12-31                 Max.   :1785   Max.   :71  
 ##   secondaires       néonat         TIIH        ASSU          VSAV   
-##  Min.   : 0.0   Min.   :0.0   Min.   :0   Min.   : 81   Min.   :12  
-##  1st Qu.: 5.0   1st Qu.:0.0   1st Qu.:0   1st Qu.:101   1st Qu.:25  
-##  Median : 7.0   Median :1.0   Median :0   Median :107   Median :29  
-##  Mean   : 7.1   Mean   :1.2   Mean   :0   Mean   :109   Mean   :29  
-##  3rd Qu.: 9.0   3rd Qu.:2.0   3rd Qu.:0   3rd Qu.:116   3rd Qu.:34  
-##  Max.   :17.0   Max.   :5.0   Max.   :0   Max.   :154   Max.   :65  
+##  Min.   : 0.0   Min.   :0.0   Min.   :0   Min.   : 81   Min.   : 9  
+##  1st Qu.: 5.0   1st Qu.:0.0   1st Qu.:0   1st Qu.:102   1st Qu.:24  
+##  Median : 7.0   Median :1.0   Median :0   Median :108   Median :29  
+##  Mean   : 7.1   Mean   :1.3   Mean   :0   Mean   :110   Mean   :29  
+##  3rd Qu.: 9.0   3rd Qu.:2.0   3rd Qu.:0   3rd Qu.:117   3rd Qu.:34  
+##  Max.   :18.0   Max.   :5.0   Max.   :0   Max.   :154   Max.   :65  
 ##     conseils      Medecins  
 ##  Min.   : 48   Min.   : 24  
-##  1st Qu.: 69   1st Qu.: 45  
+##  1st Qu.: 70   1st Qu.: 45  
 ##  Median : 84   Median : 55  
-##  Mean   : 92   Mean   : 90  
-##  3rd Qu.:108   3rd Qu.:122  
-##  Max.   :303   Max.   :312
+##  Mean   : 93   Mean   : 91  
+##  3rd Qu.:108   3rd Qu.:123  
+##  Max.   :303   Max.   :474
 ```
 
 ```r
@@ -727,15 +738,15 @@ x <- d[d$date < "2013-04-24" | d$date >  "2013-11-01", c("date","affaires")]
 boxplot(x$affaires ~ year(x$date), main="Activité du SAMU 67", ylab="Nombre d'affaires", sub="2013 = MOIS 1-4 et 11-12", col=c("red","red","red","red","red","red","red","yellow","red"))
 ```
 
-![](samu_files/figure-html/ac_67-1.png) 
+![](samu_files/figure-html/ac_67-1.png)\
 #### chiffres résumés sur l'année 2 015 pour la SAMU 67:
-- nombre d'affaires: 265 509
-- moyenne des affaires/j: 793
-- médiane des affaires/j: 750
-- nombre maximal d' affaires/j: 1 640
+- nombre d'affaires: 290 671
+- moyenne des affaires/j: 796
+- médiane des affaires/j: 752
+- nombre maximal d' affaires/j: 1 780
 - nombre minimal d' affaires/j: 459
 
-- nombre d'intervention SMUR: 14 503
+- nombre d'intervention SMUR: 15 809
 - nombre moyen d'interventions SMUR: 43
 
 
@@ -753,7 +764,7 @@ round(x * 100 / n, 2)
 ```
 
 ```
-## Time difference of 992 days
+## Time difference of 1000 days
 ```
 
 ```r
@@ -763,14 +774,14 @@ a <- zoo(s68$affaires, s68$date)
 plot(a, col="palegreen", main="Activité du SAMU 68", ylab="Nombre d'affaires")
 ```
 
-![](samu_files/figure-html/samu68-1.png) 
+![](samu_files/figure-html/samu68-1.png)\
 
 ```r
 b <- zoo(s68$conseils, s68$date)
 plot(b, col="palegreen", main="Activité du SAMU 68", ylab="Nombre de conseils")
 ```
 
-![](samu_files/figure-html/samu68-2.png) 
+![](samu_files/figure-html/samu68-2.png)\
 
 ```r
 a <- tapply(s68$affaires,year(s68$date),sum)
@@ -780,7 +791,7 @@ a
 
 ```
 ##   2006   2007   2008   2009   2010   2011   2012   2013   2014   2015 
-## 136443 140076 144826 154304 149929 122298  91300 192868 172720 157459
+## 136443 140076 144826 154304 149929 122298  91300 192868 172720 172700
 ```
 
 ```r
@@ -791,7 +802,7 @@ moy68
 
 ```
 ## 2006 2007 2008 2009 2010 2011 2012 2013 2014 2015 
-##  383  388  399  430  415  435  473  530  480  486
+##  383  388  399  430  415  435  473  530  480  488
 ```
 
 ```r
@@ -800,7 +811,7 @@ axis(1,1:9,labels = c(2006:2014))
 axis(2)
 ```
 
-![](samu_files/figure-html/samu68-3.png) 
+![](samu_files/figure-html/samu68-3.png)\
 
 ```r
 # box plot. On détermine la journée la plus active en triant les enregistrements par nb affaires décroissant. ord[1] correspond à la ligne où le nb d'affaires est le plus élevé. Il s'agit de 2006, ce qui correspond à la colonne n°4. On marque la date en face du repère.
@@ -832,7 +843,7 @@ s68$date[ord[1]]
 text(4, s68$affaires[ord[1]], s68$date[ord[1]],cex=.6,pos=4)
 ```
 
-![](samu_files/figure-html/samu68-4.png) 
+![](samu_files/figure-html/samu68-4.png)\
 
 Les 2 SAMU ensembles
 --------------------
@@ -870,13 +881,13 @@ ord <- order(d$SMUR, decreasing = TRUE)
 text(4, d$SMUR[ord[1]], d$date[ord[1]], cex = 0.6, pos = 4)
 ```
 
-![](samu_files/figure-html/smur-1.png) 
+![](samu_files/figure-html/smur-1.png)\
 
 Informations de session
 -----------------------
 
 ```
-## R version 3.2.2 (2015-08-14)
+## R version 3.2.3 (2015-12-10)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 14.04.3 LTS
 ## 
@@ -892,12 +903,11 @@ Informations de session
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] lubridate_1.3.3 xts_0.9-7       zoo_1.7-12      knitr_1.11     
+## [1] lubridate_1.5.0 xts_0.9-7       zoo_1.7-12      knitr_1.12     
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.2     lattice_0.20-33 digest_0.6.8    grid_3.2.2     
-##  [5] plyr_1.8.3      formatR_1.2.1   magrittr_1.5    evaluate_0.8   
-##  [9] stringi_1.0-1   rmarkdown_0.8.1 tools_3.2.2     stringr_1.0.0  
-## [13] yaml_2.1.13     memoise_0.2.1   htmltools_0.2.6
+##  [1] magrittr_1.5    formatR_1.2.1   tools_3.2.3     htmltools_0.3  
+##  [5] yaml_2.1.13     stringi_1.0-1   rmarkdown_0.9.3 grid_3.2.3     
+##  [9] stringr_1.0.0   digest_0.6.9    lattice_0.20-33 evaluate_0.8
 ```
 

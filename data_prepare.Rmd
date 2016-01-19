@@ -1,7 +1,9 @@
 Préparation des donnnées
 ========================================================
 
-Les données des SAMU sont tockées dans un fichier *.csv* de 2006 à 2014 inclus (1 fichier par année). La première ligne est le header. L'ensembles des données sont extraites pour former un fichier *.Rda*.
+Ce programme assure la concaténation de l'ensemble des fichiers de type SAMUxxxx.csv pour en faire un fichier de type R. Cette opération est à réalier chaque fois que les fichiers SAMU son modifiés. Il suffit de lancer le programme.
+
+Les données des SAMU sont tockées dans un fichier *.csv* de 2006 à 2015 inclus (1 fichier par année). La première ligne est le header. L'ensembles des données sont extraites pour former un fichier *.Rda*.
 
 ```{r prepare}
 path = "./samu_csv/"

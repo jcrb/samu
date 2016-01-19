@@ -1,0 +1,92 @@
+---
+title: "Papport d'activités SAMU"
+author: "JcB - RESURAL"
+date: "19/01/2016"
+output: pdf_document
+---
+
+Récupération des données
+========================
+
+```{r, echo=FALSE, comment="", message=FALSE}
+library(knitr)
+library("xts")
+library("zoo")
+library("lubridate")
+library(Rpu2)
+
+# supprimer la notation scientifique et ajouter un séparateur de milliers
+options(scipen = 6, digits = 2)
+# knit_hooks$set(inline = function(x) {prettyNum(x, big.mark=" ")})
+
+load("../samu_archive.Rda") # d
+
+names(d)
+min(d$date)
+max(d$date)
+
+anc <- 2015
+anp <- anc - 1
+```
+
+Sélection de l'année courante
+=============================
+```{r, echo=FALSE, comment=""}
+a <- d[year(as.Date(d$date)) == anc,]
+min(d$date)
+max(d$date)
+
+# SAMU 67
+s67 <- a[a$service == "SAMU 67",]
+s68 <- a[a$service == "SAMU 68",]
+```
+
+Résultats régionaux `r anc`
+==========
+
+```{r, echo=FALSE}
+# somme des colonnes sauf les 2 premières
+s <- apply(a[, 3:11], 2, sum)
+
+drm <- s["affaires"]
+smur_primaires <- s["primaires"]
+smur_secondaires <- s["secondaires"]
+smur_neonat <- s["néonat"]
+smur_tiih <- s["TIIH"]
+cons <- s["conseils"]
+med <- s["Medecins"]
+assu <- s["ASSU"]
+vsav <- s["VSAV"]
+
+# moyenne des colonnes sauf les 2 premières
+m <- apply(a[, 3:11], 2, mean, na.rm = TRUE)
+
+# somme des colonnes sauf les 2 premières pour le 67
+t67 <- apply(s67[, 3:11], 2, sum)
+
+# somme des colonnes sauf les 2 premières pour le 68
+t68 <- apply(s68[, 3:11], 2, sum)
+
+r <- rbind(t67, t68)
+rownames(r) <- c("SAMU 67", "SAMU 68")
+
+```
+
+- Nombre de dossiers de régulation médicale (DRM): `r format_n(drm)`
+- Nombre de SMUR : `r format_n(smur_primaires + smur_secondaires + smur_neonat + smur_tiih)`
+    - dont primaires: `r format_n(smur_primaires)`
+    - dont secondaires: `r format_n(smur_secondaires)`
+    - dont transports néonataux: `r format_n(smur_neonat)`
+    - dont transferts infirmiers inter hospitaliers: `r format_n(smur_tiih)`
+- Nombre d’ambulances privées à la demande du SAMU: `r format_n(assu)`
+- Nombre d'envoi de VSAV: `r format_n(vsav)`
+- Nombre de conseils médicaux: `r format_n(cons)`
+- Nombre d'envoi de médecins: `r format_n(med)`
+
+Comparaison des SAMU:
+
+```{r, echo=FALSE, comment=""}
+kable(r, format.args = list(big.mark = ' '))
+```
+
+
