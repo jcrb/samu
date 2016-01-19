@@ -29,6 +29,7 @@ anc <- 2015
 anp <- anc - 1
 ```
 
+
 Sélection de l'année courante
 =============================
 ```{r, echo=FALSE, comment=""}
