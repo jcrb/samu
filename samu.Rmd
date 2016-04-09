@@ -32,7 +32,7 @@ knit_hooks$set(inline = function(x) {
   prettyNum(x, big.mark=" ")
 })
 
-load("samu_archive.Rda")
+load("samu_archive.Rda") # d
 
 names(d)
 min(d$date)
@@ -47,7 +47,7 @@ pop.als.2010.municipale<-1095905 + 749782
 
 
 # année courante et nb de jours
-an_c <- 2015
+an_c <- 2016
 
 d <- d[year(d$date) < an_c+1,]
 
@@ -346,6 +346,64 @@ for (i in 1:periode) { points(i, moy_als[i], col = "red")} # met act.moy sous fo
 ord <- order(d$SMUR, decreasing = TRUE)
 text(4, d$SMUR[ord[1]], d$date[ord[1]], cex = 0.6, pos = 4)
 ```
+Activité 2016
+=============
+SAMU 67
+```{r, s67-2016}
+s67 <- d[d$date > "2015-12-31" & d$service == "SAMU 67" ,]
+xts_s67 <- as.xts(s67, order.by = s67$date)
+a <- zoo(s67$affaires, s67$date)
+plot(a, col="palegreen", main="Activité du SAMU 67 - 2016", ylab="Nombre d'affaires", xaxt = "n", xlab = "")
+# at <- seq(as.Date(min(s67$date)), as.Date(max(s67$date)), 7)
+# La première semaine de l'année commence le 4/1
+at <- seq(as.Date("2016-01-04"), as.Date(max(s67$date)), 7)
+
+# période de grippe
+c <- rgb(0, 1, 0, 0.2) # "palegreen"
+rect(at[11], 50, at[14], 1400, col = c, border = c)
+text(at[12], 1300, "Grippe")
+
+lines(rollmean(a, 7), col="red")
+axis(2)
+axis(1, at, format(at, "%b %d"), las = 2, cex.axis = 0.7)
+
+# Ajout des tensions
+tension.file <- read.csv("../HET/Jours_de_tension/Tensions_2015-2016.csv")
+tension <- tension.file[2:89, 1:2]
+tension$Date <- as.Date(tension$Date)
+c <- rgb(1, 0, 0, 0.5)
+for(i in 1:nrow(tension)){
+  rect(tension[i,1],0,tension[i,1]+1, 470 + tension[i,2]*50, col = c, border = NA)
+  #abline(v = as.Date(tension[i,1]))
+}
+```
+
+
+SAMU 68
+```{r, s68-2016}
+s68 <- d[d$date > "2015-12-31" & d$service == "SAMU 68" ,]
+xts_s68 <- as.xts(s68, order.by = s68$date)
+b <- zoo(s68$affaires, s68$date)
+plot(b, col="palegreen", main="Activité du SAMU 68 - 2016", ylab="Nombre d'affaires", xaxt = "n", xlab = "")
+# at <- seq(as.Date(min(s68$date)), as.Date(max(s68$date)), 7)
+at <- seq(as.Date("2016-01-04"), as.Date(max(s68$date)), 7)
+
+# période de grippe
+c <- rgb(0, 1, 0, 0.2) # "palegreen"
+rect(at[11], 50, at[14], 800, col = c, border = c)
+text(at[12], 700, "Grippe")
+
+lines(rollmean(b, 7), col="red")
+# axis(2)
+axis(1, at, format(at, "%b %d"), las = 2, cex.axis = 0.7)
+```
+
+2 SAMU
+```{r}
+plot(b, col="palegreen", main="Activité du SAMU 68 - 2016", ylab="Nombre d'affaires", xaxt = "n", xlab = "")
+```
+
+
 
 Informations de session
 -----------------------
