@@ -949,6 +949,12 @@ text(at[12], 700, "Grippe")
 lines(rollmean(b, 7), col="red")
 # axis(2)
 axis(1, at, format(at, "%b %d"), las = 2, cex.axis = 0.7)
+
+# ajout des tensions
+c <- rgb(1, 0, 0, 0.5)
+for(i in 1:nrow(tension)){
+  rect(tension[i,1],0,tension[i,1]+1, 340 + tension[i,2]*40, col = c, border = NA)
+}
 ```
 
 ![](samu_files/figure-html/s68-2016-1.png)
