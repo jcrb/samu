@@ -1,0 +1,85 @@
+---
+title: "Données SAMU Grand Est"
+author: "JcB"
+date: "10 mai 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE)
+```
+
+Calcul des données nécéssaires pour la panorama Grand Est. Pour la grille de réponse attendues voir la tableau Execel ou Libre Office dans le même dossier.
+
+__Dossier:__ SAMU/Chiffres_Cles/SAMU_pour_ACAL
+
+```{r}
+library(knitr)
+library("xts")
+library("zoo")
+library("lubridate")
+
+# supprimer la notation scientifique et ajouter un séparateur de milliers
+options(scipen = 6, digits = 2)
+knit_hooks$set(inline = function(x) {
+  prettyNum(x, big.mark=" ")
+})
+
+# Lire la BD
+load("../samu_archive.Rda") # d
+d15 <- d[year(d$date) == 2015,]
+
+```
+
+
+Nombre d'affaires par SAMU en 2013, 2014, 2015
+----------------------------------------------
+```{r}
+tapply(d$affaires, list(year(d$date), d$service), sum)
+```
+
+Nombre d'affaires par mois et par AMU en 2015
+---------------------------------------------
+```{r}
+tapply(d15$affaires, list(month(d15$date), d15$service), sum)
+```
+
+Nombre d'afaires par jour de semaine et par SAMU
+------------------------------------------------
+```{r}
+tapply(d15$affaires, list(wday(d15$date, label = TRUE), d15$service), sum)
+```
+
+Nombre d'envoi d'effecteurs
+----------------------------
+
+### Médecins
+```{r}
+tapply(d15$Medecins, d15$service, sum)
+```
+
+### ASSU
+```{r}
+tapply(d15$ASSU, d15$service, sum)
+```
+
+### VSAV
+```{r}
+tapply(d15$VSAV, d15$service, sum)
+```
+
+### Primaires
+```{r}
+tapply(d15$primaires, d15$service, sum)
+```
+
+### Secondaires
+```{r}
+tapply(d15$secondaires, d15$service, sum)
+```
+
+### TIIH
+```{r}
+tapply(d15$TIIH, d15$service, sum)
+```
+

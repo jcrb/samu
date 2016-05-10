@@ -975,7 +975,7 @@ Informations de session
 ```
 ## R version 3.2.4 (2016-03-10)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.11.3 (El Capitan)
+## Running under: OS X 10.11.4 (El Capitan)
 ## 
 ## locale:
 ## [1] fr_FR.UTF-8/fr_FR.UTF-8/fr_FR.UTF-8/C/fr_FR.UTF-8/fr_FR.UTF-8
